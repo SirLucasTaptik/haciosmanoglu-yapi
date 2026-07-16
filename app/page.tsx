@@ -36,7 +36,7 @@ export default async function HomePage() {
           <p className="mb-5 font-mono text-xs uppercase tracking-[0.3em] text-gold">
             Kentsel Dönüşüm
           </p>
-          <h1 className="font-display text-display-xl leading-[1.02] tracking-tight text-porcelain">
+          <h1 className="font-display text-display-lg leading-[1.02] tracking-tight text-porcelain">
             {hero.headline}
           </h1>
           <p className="mt-6 max-w-md text-lg text-porcelain/80">{hero.subheadline}</p>
