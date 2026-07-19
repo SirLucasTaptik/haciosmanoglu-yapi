@@ -16,15 +16,33 @@ export default async function HomePage() {
     <div>
       {/* Hero — full-bleed image, huge centered sans headline, generous negative space */}
       <section className="relative flex min-h-[92vh] flex-col items-center justify-center overflow-hidden px-6 pb-16 pt-32 text-center md:min-h-[85vh]">
-        <Image
-          src={hero.backgroundImageUrl}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-          style={{ filter: "grayscale(35%) brightness(0.5)" }}
+        {/* Static fallback layer — shows whenever the video is hidden (prefers-reduced-motion) or hasn't loaded yet */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url(${hero.backgroundImageUrl})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            filter: "grayscale(35%) brightness(0.5)",
+          }}
         />
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-hidden="true"
+          poster={hero.backgroundImageUrl}
+          className="hero-video absolute inset-0 h-full w-full object-cover"
+          style={{ filter: "grayscale(35%) brightness(0.5)" }}
+        >
+          {/* Aerial night city footage — free for commercial use (Mixkit Stock Video Free License) */}
+          <source
+            src="https://assets.mixkit.co/videos/49845/49845-720.mp4"
+            type="video/mp4"
+          />
+        </video>
         <div
           className="absolute inset-0"
           style={{
@@ -33,10 +51,16 @@ export default async function HomePage() {
           }}
         />
         <div className="relative z-10 flex max-w-3xl flex-col items-center fade-up">
-          <p className="mb-5 font-mono text-xs uppercase tracking-[0.3em] text-gold">
-            Kentsel Dönüşüm
-          </p>
-          <h1 className="font-display text-display-lg leading-[1.02] tracking-tight text-porcelain">
+          <span className="mb-6 flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-[1.5px] border-gold bg-porcelain p-0.5 sm:h-20 sm:w-20">
+            <Image
+              src="/logo.jpeg"
+              alt="Hacıosmanoğlu Yapı"
+              width={80}
+              height={80}
+              className="rounded-full object-cover"
+            />
+          </span>
+          <h1 className="font-display text-display-lg leading-[1.05] tracking-tight text-porcelain">
             {hero.headline}
           </h1>
           <p className="mt-6 max-w-md text-lg text-porcelain/80">{hero.subheadline}</p>
