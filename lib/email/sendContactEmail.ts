@@ -3,47 +3,60 @@ import type { ContactFormValues } from "@/lib/validation/contact";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM_ADDRESS = "Hacıosmanoğlu Yapı Web Sitesi <onboarding@resend.dev>";
-// NOTE: swap FROM_ADDRESS to a verified domain sender (e.g. no-reply@haciosmanoglu-yapi.com)
-// once the sending domain is verified in the Resend dashboard. Until then,
-// Resend's shared onboarding@resend.dev sender works for testing.
+// Eğer domain doğrulandıysa bunu kullan:
+// const FROM_ADDRESS = "Hacıosmanoğlu Yapı <noreply@haciosmanogluyapi.com>";
 
-export async function sendContactEmail(data: Omit<ContactFormValues, "company">) {
+// Şimdilik bunu bırakabilirsin:
+const FROM_ADDRESS = "Hacıosmanoğlu Yapı Web Sitesi <onboarding@resend.dev>";
+
+export async function sendContactEmail(
+  data: Omit<ContactFormValues, "company">
+) {
   const recipient = process.env.CONTACT_FORM_RECIPIENT;
+
   if (!recipient) {
-    throw new Error(
-      "CONTACT_FORM_RECIPIENT is not set — see .env.example."
-    );
+    throw new Error("CONTACT_FORM_RECIPIENT is not set.");
   }
 
   const { name, phone, email, message } = data;
 
-  return resend.emails.send({
+  const result = await resend.emails.send({
     from: FROM_ADDRESS,
     to: recipient,
     replyTo: email,
     subject: `Yeni İletişim Formu — ${name}`,
-    text: [
-      `Ad Soyad: ${name}`,
-      `Telefon: ${phone}`,
-      `E-posta: ${email}`,
-      "",
-      "Mesaj:",
-      message,
-    ].join("\n"),
+    text: `
+Ad Soyad: ${name}
+Telefon: ${phone}
+E-posta: ${email}
+
+Mesaj:
+${message}
+`,
     html: `
-      <div style="font-family: sans-serif; max-width: 480px;">
-        <h2 style="margin-bottom: 4px;">Yeni İletişim Formu</h2>
-        <p style="color:#555; margin-top: 0;">Hacıosmanoğlu Yapı web sitesi</p>
-        <table style="width: 100%; border-collapse: collapse;">
-          <tr><td style="padding: 4px 0; color:#888;">Ad Soyad</td><td>${escapeHtml(name)}</td></tr>
-          <tr><td style="padding: 4px 0; color:#888;">Telefon</td><td>${escapeHtml(phone)}</td></tr>
-          <tr><td style="padding: 4px 0; color:#888;">E-posta</td><td>${escapeHtml(email)}</td></tr>
-        </table>
-        <p style="margin-top: 16px; white-space: pre-wrap;">${escapeHtml(message)}</p>
+      <div style="font-family:sans-serif">
+        <h2>Yeni İletişim Formu</h2>
+
+        <p><strong>Ad Soyad:</strong> ${escapeHtml(name)}</p>
+        <p><strong>Telefon:</strong> ${escapeHtml(phone)}</p>
+        <p><strong>E-posta:</strong> ${escapeHtml(email)}</p>
+
+        <hr>
+
+        <p>${escapeHtml(message)}</p>
       </div>
     `,
   });
+
+  console.log("========== RESEND ==========");
+  console.log(result);
+  console.log("============================");
+
+  if (result.error) {
+    throw new Error(JSON.stringify(result.error));
+  }
+
+  return result;
 }
 
 function escapeHtml(input: string) {
