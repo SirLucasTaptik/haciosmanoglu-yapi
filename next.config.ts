@@ -25,7 +25,15 @@ const nextConfig: NextConfig = {
     ];
   },
   async redirects() {
-    return [];
+    // Canonical host is www.haciosmanogluyapi.com — send the bare domain there.
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "haciosmanogluyapi.com" }],
+        destination: "https://www.haciosmanogluyapi.com/:path*",
+        permanent: true,
+      },
+    ];
   },
 };
 

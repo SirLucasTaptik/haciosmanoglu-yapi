@@ -99,9 +99,10 @@ npm run dev
 4. Test için: `npm run dev` → `/iletisim` → formu doldur. `RESEND_API_KEY`
    girilmemişse Resend hata döner ve form kullanıcıya "doğrudan telefon/
    WhatsApp ile ulaşın" mesajını gösterir — sessizce başarısız olmaz.
-5. Üretimde `lib/email/sendContactEmail.ts` içindeki `FROM_ADDRESS`'i,
-   Resend panelinde doğruladığın kendi alan adınla değiştir (şu an test
-   amaçlı paylaşılan `onboarding@resend.dev` gönderici adresini kullanıyor).
+5. Üretimde `haciosmanogluyapi.com`'u Resend panelinde doğruladıktan sonra
+   `RESEND_FROM_ADDRESS` değişkenini ayarla (örn.
+   `Hacıosmanoğlu Yapı <no-reply@haciosmanogluyapi.com>`). Ayarlanmadığı
+   sürece test amaçlı paylaşılan `onboarding@resend.dev` adresi kullanılır.
 
 ### Vercel'e Deploy
 
@@ -110,6 +111,37 @@ npm run dev
 3. `.env.example` içindeki tüm değişkenleri Vercel proje ayarlarında
    "Environment Variables" olarak gir.
 4. Deploy et.
+
+### Alan Adı Bağlama (www.haciosmanogluyapi.com)
+
+Ana adres **www.haciosmanogluyapi.com**; `haciosmanogluyapi.com` (www'suz)
+adresine gelen istekler `next.config.ts` içindeki yönlendirmeyle kalıcı
+(308) olarak www'ya gönderilir.
+
+1. **Vercel** → Proje → Settings → **Domains** → `www.haciosmanogluyapi.com`
+   ekle, ardından `haciosmanogluyapi.com` ekle ve "Redirect to
+   www.haciosmanogluyapi.com" seçeneğini işaretle.
+2. **Alan adını aldığın firmanın DNS paneli** (GoDaddy, Natro, İsimtescil
+   vb.) — şu kayıtları gir (eski A/CNAME kayıtları varsa sil):
+
+   | Tür | Ad (Host) | Değer |
+   |---|---|---|
+   | `A` | `@` | `76.76.21.21` |
+   | `CNAME` | `www` | `cname.vercel-dns.com` |
+
+   Vercel, Domains ekranında projene özel farklı bir değer gösterirse
+   oradaki değeri kullan.
+3. Vercel → Settings → **Environment Variables** →
+   `NEXT_PUBLIC_SITE_URL=https://www.haciosmanogluyapi.com` ekle ve yeniden
+   deploy et.
+4. DNS yayılması birkaç dakika ile 48 saat arasında sürebilir. Vercel
+   Domains ekranında iki alan adı da "Valid Configuration" gösterdiğinde
+   SSL sertifikası otomatik oluşturulur.
+5. (İsteğe bağlı) **Google Search Console**'a
+   `https://www.haciosmanogluyapi.com` ekle ve `/sitemap.xml`'i gönder.
+6. **Resend** → Domains → `haciosmanogluyapi.com` ekle; Resend'in verdiği
+   MX/TXT (SPF, DKIM) kayıtlarını aynı DNS paneline gir. Doğrulandıktan
+   sonra Vercel'e `RESEND_FROM_ADDRESS` değişkenini ekle.
 
 ### Sanity İçerik Girişi
 
@@ -130,7 +162,7 @@ sayfasını doldur.
 ### Site URL (SEO için önemli)
 
 `.env.local` → `NEXT_PUBLIC_SITE_URL` değişkenini gerçek alan adınla
-doldur (örn. `https://haciosmanoglu-yapi.com`). Bu değer `sitemap.xml`,
+doldur: `https://www.haciosmanogluyapi.com`. Bu değer `sitemap.xml`,
 `robots.txt`, OpenGraph/canonical URL'ler ve JSON-LD yapılandırılmış
 veride kullanılıyor.
 

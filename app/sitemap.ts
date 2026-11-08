@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { sanityClient } from "@/lib/sanity/client";
 import { allProjectSlugsQuery } from "@/lib/sanity/queries";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://haciosmanoglu-yapi.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.haciosmanogluyapi.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [

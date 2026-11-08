@@ -24,7 +24,7 @@ const plexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://haciosmanoglu-yapi.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.haciosmanogluyapi.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

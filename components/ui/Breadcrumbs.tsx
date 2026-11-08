@@ -6,7 +6,7 @@ interface Crumb {
   href?: string;
 }
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://haciosmanoglu-yapi.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.haciosmanogluyapi.com";
 
 export function Breadcrumbs({ items }: { items: Crumb[] }) {
   const structuredData = {

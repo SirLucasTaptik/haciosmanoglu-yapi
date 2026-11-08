@@ -1,10 +1,11 @@
 import { Resend } from "resend";
 import type { ContactFormValues } from "@/lib/validation/contact";
 
-const FROM_ADDRESS = "Hacıosmanoğlu Yapı Web Sitesi <onboarding@resend.dev>";
-// NOTE: swap FROM_ADDRESS to a verified domain sender (e.g. no-reply@haciosmanoglu-yapi.com)
-// once the sending domain is verified in the Resend dashboard. Until then,
-// Resend's shared onboarding@resend.dev sender works for testing.
+// Set RESEND_FROM_ADDRESS (e.g. "Hacıosmanoğlu Yapı <no-reply@haciosmanogluyapi.com>")
+// once haciosmanogluyapi.com is verified in the Resend dashboard. Until then,
+// Resend's shared onboarding@resend.dev sender is used for testing.
+const FROM_ADDRESS =
+  process.env.RESEND_FROM_ADDRESS ?? "Hacıosmanoğlu Yapı Web Sitesi <onboarding@resend.dev>";
 
 export async function sendContactEmail(data: Omit<ContactFormValues, "company">) {
   const recipient = process.env.CONTACT_FORM_RECIPIENT;
